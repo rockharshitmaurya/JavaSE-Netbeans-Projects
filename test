@@ -1,0 +1,1207 @@
+SCSE
+
+
+SUBJECT: Cyber Security
+
+
+B.E.  Year –  3 Semester
+
+
+
+
+
+
+
+
+
+
+
+
+
+LAB MANUAL 
+						Prepared By:
+				   Surendra Singh Chauhan
+						July, 2021
+
+
+
+
+
+
+
+
+	Unit I
+S.no	Name of the practical
+1	Perform the practical of Caesar Cipher
+Perform the practical of Playfair algorithm
+2	Perform the practical of Hill Cipher
+3	Perform the practical of Diffie hellman key exchange algorithm.
+Perform the practical of RSA algorithm
+4	Perform the modes
+	Unit II
+5	Perform the practical of MD5
+6	Perform the practical of SHA1
+7	Perform the practical of digital signature on text
+	
+	Unit III
+9	Perform the practical to generate digital certificate
+10	
+
+
+
+
+
+
+
+
+
+
+
+EXPERIMENT-1
+AIM: To Perform Caeser Cipher 
+
+CODE:
+#include<stdio.h>
+#include<conio.h>
+void main()
+{
+	char a[10];
+	int z,i,x[10],c[10],d[10],u,m[i];
+	printf("Enter the skips: ");
+	scanf("%d",&u);
+	printf("Enter any string of length 10: ");
+	for(i=0;i<10;i++)
+	{
+		scanf("%s",&a[i]);
+	}
+//	printf("\nORIGINAL STRING:%s \n\n",a);
+	for(i=0;i<10;i++) //Encrypt
+	{
+		x[i]=a[i];		
+		if(x[i]>=88)
+		{
+			c[i]=x[i]-26+u;
+		}
+		else
+		{
+			c[i]=x[i]+u;
+		}
+		
+	}
+	printf("Cipher text:");
+		for(i=0;i<10;i++)
+	printf("%c",c[i]);
+	
+	
+	//DECRYPT
+	for(i=0;i<10;i++)
+	{
+		x[i]=c[i];		
+		if(x[i]<=67){
+		
+		d[i]=x[i]+26-u;}
+		else{
+		
+		d[i]=x[i]-u;
+		}
+	}
+	printf("\nDeciphered text: ");
+		for(i=0;i<10;i++)
+		{
+			printf("%c",d[i]);
+		}
+		
+		
+		
+	//Brute Force		
+	for(z=0;z<26;z++)
+	{
+		
+		for(i=0;i<10;i++)
+		{
+		x[i]=c[i];		
+		if(x[i]<65+z)
+		{
+		
+		m[i]=x[i]+26-z;
+		}
+		else{
+		
+		m[i]=x[i]-z;
+		}
+		}
+	printf("\nPLAIN text:\n");
+		for(i=0;i<10;i++)
+	printf("%c",m[i]);	
+	}
+		
+	
+	getch();
+}
+
+OUTPUT:
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXPERIMENT-2
+AIM: To Perform Diffie-Hellman Algorithm
+CODE: 
+#include<stdio.h>
+long long int power(int a,int b,int mod)
+{
+ long long int t;
+ if(b==1)
+  return a;
+ t=power(a,b/2,mod);
+ if(b%2==0)
+  return (t*t)%mod;
+ else
+  return (((t*t)%mod)*a)%mod;
+}
+long long int calculateKey(int a,int x,int n)
+{
+ return power(a,x,n);
+}
+int main()
+{
+ int n,g,x,a,y,b;
+ // both the persons will be agreed upon the common n and g
+ printf("Enter the value of n and g : ");
+ scanf("%d%d",&n,&g);
+ 
+ // first person will choose the x
+ printf("Enter the value of x for the first person : ");
+ scanf("%d",&x);
+ a=power(g,x,n);
+ 
+ // second person will choose the y
+ printf("Enter the value of y for the second person : ");
+ scanf("%d",&y);
+ b=power(g,y,n);
+ 
+ printf("key for the first person is : %lld\n",power(b,x,n));
+ printf("key for the second person is : %lld\n",power(a,y,n));
+ return 0;
+}
+
+OUTPUT: 
+
+
+
+
+
+
+
+
+
+
+EXPERIMENT-3
+Aim: To Perform Playfair Cipher Algorithm
+CODE: 
+#include <iostream>
+#include <string>
+using namespace std;
+class playfair {
+   public:
+      string msg; char n[5][5];
+   void play( string k, string t, bool m, bool e ) {
+      createEncoder( k, m );
+      getText( t, m, e );
+      if( e )
+         play( 1 );
+      else
+         play( -1 );
+      print();
+   }
+   private:
+      void play( int dir ) {
+      int j,k,p,q;
+      string nmsg;
+      for( string::const_iterator it = msg.begin(); it != msg.end(); it++ ) {
+         if( getPos( *it++, j, k ) )
+         if( getPos( *it, p, q) {
+            //for same row
+            if( j == p ) {
+               nmsg+= getChar( j, k + dir );
+               nmsg += getChar( p, q + dir );
+            }
+            //for same column
+            else if( k == q ) {
+               nmsg += getChar( j + dir, k );
+               nmsg += getChar( p + dir, q );
+            } else {
+               nmsg += getChar( p, k );
+               nmsg += getChar( j, q );
+            }
+         }
+      }
+      msg = nmsg;
+   }
+   void print() //print the solution {
+      cout << "\n\n Solution:" << endl;
+      string::iterator it = msg.begin(); int count = 0;
+      while( it != msg.end() ) {
+         cout << *it;
+         it++;
+         cout << *it << " ";
+         it++;
+         if( ++count >= 26 )
+         cout << endl;
+         count = 0;
+      }
+      cout << endl << endl;
+   }
+   char getChar( int a, int b ) { //get the characters
+      return n[ (b + 5) % 5 ][ (a + 5) % 5 ];
+   }
+   bool getPos( char l, int &c, int &d ) { //get the position
+      for( int y = 0; y < 5; y++ )
+      for( int x = 0; x < 5; x++ )
+      if( n[y][x] == l ) {
+         c = x;
+         d= y;
+      return true;
+      }
+      return false;
+   }
+   void getText( string t, bool m, bool e ) { //get the original message
+      for( string::iterator it = t.begin(); it != t.end(); it++ ) {
+         //to choose J = I or no Q in the alphabet.
+         *it = toupper( *it );
+         if( *it < 65 || *it > 90 )
+            continue;
+         if( *it == 'J' && m )
+            *it = 'I';
+         else if( *it == 'Q' && !m )
+            continue;
+         msg += *it;
+      }  
+      if( e ) {
+         string nmsg = ""; size_t len = msg.length();
+         for( size_t x = 0; x < len; x += 2 ) {
+            nmsg += msg[x];
+            if( x + 1 < len ) {
+               if( msg[x] == msg[x + 1] ) nmsg += 'X';
+               nmsg += msg[x + 1];
+            }
+         }
+         msg = nmsg;
+      }
+      if( msg.length() & 1 )
+      msg += 'X';
+   }
+   void createEncoder( string key, bool m ) { //creation of the key table
+      if( key.length() < 1 )
+      key= "KEYWORD";
+      key += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      string s= "";
+      for( string::iterator it = key.begin(); it != key.end(); it++ ) {
+         *it = toupper( *it );
+         if( *it < 65 || *it > 90 )
+            continue;
+         if( ( *it == 'J' && m ) || ( *it == 'Q' && !m ) )
+            continue;
+         if( s.find( *it ) == -1 )
+            s += *it;
+      }
+      copy( s.begin(), s.end(), &n[0][0] );
+   }
+};
+int main( int argc, char* argv[] ) {
+   string k, i, msg;
+   bool m, c;
+   cout << "Encrpty or Decypt? ";
+   getline( cin, i );
+   c = ( i[0] == 'e' || i[0] == 'E' );
+   cout << "Enter a key: ";
+   getline( cin, k);
+   cout << "I <-> J (Y/N): ";
+   getline( cin, i );
+   m = ( i[0] == 'y' || i[0] == 'Y' );
+   cout << "Enter the message: ";
+   getline( cin, msg );
+   playfair pf;
+   pf.play( k, msg,m, c );
+   return system( "pause" );
+}
+
+
+OUTPUT:
+
+Encrpty or Decypt? e
+Enter a key: players
+I <-> J (Y/N): y
+Enter the message: This is tutorialspoint
+
+
+Solution:
+OK GC GC MZ MQ CF YA RL QH OM
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXPERIMENT-4
+
+Aim: To Perform  Rivest-Shamir-Adleman (RSA) Algorithm
+CODE: 
+// C program for RSA asymmetric cryptographic 
+// algorithm. For demonstration values are 
+// relatively small compared to practical 
+// application 
+#include<stdio.h> 
+#include<math.h> 
+  
+// Returns gcd of a and b 
+int gcd(int a, int h) 
+{ 
+    int temp; 
+    while (1) 
+    { 
+        temp = a%h; 
+        if (temp == 0) 
+          return h; 
+        a = h; 
+        h = temp; 
+    } 
+} 
+  
+// Code to demonstrate RSA algorithm 
+int main() 
+{ 
+    // Two random prime numbers 
+    double p = 3; 
+    double q = 7; 
+  
+    // First part of public key: 
+    double n = p*q; 
+  
+    // Finding other part of public key. 
+    // e stands for encrypt 
+    double e = 2; 
+    double phi = (p-1)*(q-1); 
+    while (e < phi) 
+    { 
+        // e must be co-prime to phi and 
+        // smaller than phi. 
+        if (gcd(e, phi)==1) 
+            break; 
+        else
+            e++; 
+    } 
+  
+    // Private key (d stands for decrypt) 
+    // choosing d such that it satisfies 
+    // d*e = 1 + k * totient 
+    int k = 2;  // A constant value 
+    double d = (1 + (k*phi))/e; 
+  
+    // Message to be encrypted 
+    double msg = 20; 
+  
+    printf("Message data = %lf", msg); 
+  
+    // Encryption c = (msg ^ e) % n 
+    double c = pow(msg, e); 
+    c = fmod(c, n); 
+    printf("\nEncrypted data = %lf", c); 
+  
+    // Decryption m = (c ^ d) % n 
+    double m = pow(c, d); 
+    m = fmod(m, n); 
+    printf("\nOriginal Message Sent = %lf", m); 
+  
+    return 0; 
+} 
+
+OUTPUT:
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXPERIMENT-5
+AIM: WAP on Cipher Block Chaining
+CODE:
+
+import java.util.*;
+import java.nio.charset.Charset;
+
+class Main {
+private static final Charset UTF_8 = Charset.forName("UTF-8"); public static void main(String[] args) {
+Scanner sc = new Scanner(System.in); System.out.print("Enter the text for conversion : "); String text = sc.nextLine();
+String keys;
+boolean continueLoop = true; do {
+System.out.print("Enter 8 character key for conversion : "); keys = sc.nextLine();
+if(keys.length() == 8) { continueLoop = false;
+}
+}while(continueLoop); continueLoop = true; String iVs;
+do {
+System.out.print("Enter 8 character IV for conversion : "); iVs = sc.nextLine();
+if(iVs.length() == 8) { continueLoop = false;
+}
+}while(continueLoop);
+byte[] bytes = text.getBytes(UTF_8); byte[] key = keys.getBytes(UTF_8); byte[] iV = iVs.getBytes(UTF_8);
+
+System.out.println("	");
+System.out.println("Original text = " + new String(bytes, UTF_8)); System.out.println("Original bytes = "+ Arrays.toString(bytes)); for(int i = 0; i < bytes.length; i++) {
+bytes[i] = (byte)(bytes[i] ^ iV[i % 8]);
+bytes[i] = (byte)(bytes[i] ^ key[i % 8]); if(i % 8 == 7) {
+for(int j = i - 7; j <= i; j++) { iV[j % 8] = bytes[j];
+}
+}
+ 
+}
+
+
+System.out.println("	");
+System.out.println("Transformed text = "+new String(bytes, UTF_8)); System.out.println("Transformed bytes = "+ Arrays.toString(bytes));
+
+byte[] temp = new byte[8];
+for(int i = 0; i < bytes.length; i++) { temp[i] = (byte)bytes[i];
+if(i == 7) { break;
+}
+}
+
+for(int i = 0; i < bytes.length; i++) { bytes[i] = (byte)(bytes[i] ^ key[i]);
+bytes[i] = (byte)(bytes[i] ^ iV[i]); if(i == 7) {
+break;
+}
+}
+
+for(int i = 8; i < bytes.length; i++) { if(i % 8 == 0) {
+for(int j = 0; j < 8; j++) { iV[j] = temp[j];
+temp[j] = bytes[j + i];
+}
+}
+bytes[i] = (byte)(bytes[i] ^ key[i]);
+bytes[i] = (byte)(bytes[i] ^ iV[i]);
+}
+
+System.out.println("	");
+System.out.println("Original text again= "+new String(bytes, UTF_8)); System.out.println("Original bytes = "+ Arrays.toString(bytes));
+}
+}
+ 
+OUTPUT:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXPERIMENT-6
+AIM: WAP on Electronic Code Book
+CODE:
+import java.util.*;
+import java.nio.charset.Charset;
+
+class Main {
+private static final Charset UTF_8 = Charset.forName("UTF-8"); public static void main(String[] args) {
+Scanner sc = new Scanner(System.in); System.out.print("Enter the text for conversion : "); String text = sc.nextLine();
+String keys;
+boolean continueLoop = true; do {
+System.out.print("Enter 8 character key for conversion : "); keys = sc.nextLine();
+if(keys.length() == 8) { continueLoop = false;
+}
+}while(continueLoop);
+byte[] bytes = text.getBytes(UTF_8); byte[] key = keys.getBytes(UTF_8);
+System.out.println("	");
+System.out.println("Original text = " + new String(bytes, UTF_8)); System.out.println("Original bytes = "+ Arrays.toString(bytes)); for(int i = 0; i < bytes.length; i++) {
+bytes[i] = (byte)(bytes[i] ^ key[i % 8]);
+}
+
+System.out.println("	");
+System.out.println("Transformed text = "+new String(bytes, UTF_8)); System.out.println("Transformed bytes = "+ Arrays.toString(bytes));
+
+for(int i = 0; i < bytes.length; i++) { bytes[i] = (byte)(bytes[i] ^ key[i % 8]);
+}
+
+System.out.println("	");
+System.out.println("Original text again= "+new String(bytes, UTF_8)); System.out.println("Original bytes = "+ Arrays.toString(bytes));
+}
+}
+ 
+OUTPUT:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXPERIMENT-7
+AIM: WAP on Digital Signature
+CODE:
+import random
+from hashlib import sha256
+
+
+def coprime(a, b): while b != 0:
+a, b = b, a % b return a
+
+
+def extended_gcd(aa, bb):
+lastremainder, remainder = abs(aa), abs(bb) x, lastx, y, lasty = 0, 1, 1, 0
+while remainder:
+lastremainder, (quotient, remainder) = remainder, divmod(lastremainder, remainder) x, lastx = lastx - quotient*x, x
+y, lasty = lasty - quotient*y, y
+return lastremainder, lastx * (-1 if aa < 0 else 1), lasty * (-1 if bb < 0 else 1)
+
+#Euclid's extended algorithm for finding the multiplicative inverse of two numbers def modinv(a, m):
+g, x, y = extended_gcd(a, m) if g != 1:
+raise Exception('Modular inverse does not exist') return x % m
+
+
+def is_prime(num): if num == 2:
+return True
+if num < 2 or num % 2 == 0: return False
+for n in range(3, int(num**0.5)+2, 2): if num % n == 0:
+return False return True
+
+
+def generate_keypair(p, q):
+if not (is_prime(p) and is_prime(q)):
+raise ValueError('Both numbers must be prime.') elif p == q:
+raise ValueError('p and q cannot be equal')
+ 
+
+n = p * q
+
+#Phi is the totient of n phi = (p-1) * (q-1)
+
+#Choose an integer e such that e and phi(n) are coprime e = random.randrange(1, phi)
+
+#Use Euclid's Algorithm to verify that e and phi(n) are comprime g = coprime(e, phi)
+
+while g != 1:
+e = random.randrange(1, phi) g = coprime(e, phi)
+
+#Use Extended Euclid's Algorithm to generate the private key d = modinv(e, phi)
+
+#Return public and private keypair
+#Public key is (e, n) and private key is (d, n) return ((e, n), (d, n))
+
+
+def encrypt(privatek, plaintext): #Unpack the key into it's components key, n = privatek
+#Convert each letter in the plaintext to numbers based on the character using a^b mod m numberRepr = [ord(char) for char in plaintext]
+print("Number representation before encryption: ", numberRepr) cipher = [pow(ord(char),key,n) for char in plaintext]
+
+#Return the array of bytes return cipher
+
+
+def decrypt(publick, ciphertext): #Unpack the key into its components key, n = publick
+
+#Generate the plaintext based on the ciphertext and key using a^b mod m numberRepr = [pow(char, key, n) for char in ciphertext]
+plain = [chr(pow(char, key, n)) for char in ciphertext] print("Decrypted number representation is: ", numberRepr)
+ 
+#Return the array of bytes as a string return ''.join(plain)
+
+
+def hashFunction(message):
+hashed = sha256(message.encode("UTF-8")).hexdigest() return hashed
+
+
+def verify(receivedHashed, message): ourHashed = hashFunction(message) if receivedHashed == ourHashed:
+print("Verification successful: ", ) print(receivedHashed, " = ", ourHashed)
+else:
+
+print("Verification failed") print(receivedHashed, " != ", ourHashed)
+
+
+def main():
+p = int(input("Enter a prime number (17, 19, 23, etc): "))
+q = int(input("Enter another prime number (Not one you entered above): ")) #p = 17
+#q=23
+
+
+print("Generating your public/private keypairs now . . .") public, private = generate_keypair(p, q)
+
+print("Your public key is ", public ," and your private key is ", private) message = input("Enter a message to encrypt with your private key: ") print("")
+
+hashed = hashFunction(message)
+
+print("Encrypting message with private key ", private ," . . .") encrypted_msg = encrypt(private, hashed)
+print("Your encrypted hashed message is: ") print(''.join(map(lambda x: str(x), encrypted_msg))) #print(encrypted_msg)
+
+print("")
+print("Decrypting message with public key ", public ," . . .")
+
+decrypted_msg = decrypt(public, encrypted_msg) print("Your decrypted message is:") print(decrypted_msg)
+ 
+
+print("")
+print("Verification process . . .") verify(decrypted_msg, message)
+
+main()
+
+OUTPUT:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXPERIMENT-8
+AIM: To Perform Hill Cipher
+
+CODE:
+#include<iostream>
+#include<math.h>
+
+using namespace std;
+float en[3][1], de[3][1], a[3][3], b[3][3], msg[3][1], m[3][3];
+void getKeyMatrix() { 
+
+   int i, j;
+   char mes[3];
+   cout<<"Enter 3x3 matrix for key (should have inverse for decryption purpose):\n";
+   for(i = 0; i < 3; i++)
+   for(j = 0; j < 3; j++) {
+      cin>>a[i][j];
+      m[i][j] = a[i][j];
+   }
+   cout<<"\nEnter a string of 3 letter(use A through Z): ";
+   cin>>mes;
+   for(i = 0; i < 3; i++)
+   msg[i][0] = mes[i] - 65;
+}
+void encrypt() { 
+   int i, j, k;
+   for(i = 0; i < 3; i++)
+   for(j = 0; j < 1; j++)
+   for(k = 0; k < 3; k++)
+   en[i][j] = en[i][j] + a[i][k] * msg[k][j];
+   cout<<"\nEncrypted string is: ";
+   for(i = 0; i < 3; i++)
+   cout<<(char)(fmod(en[i][0], 26) + 65); 
+}
+void inversematrix() {
+   int i, j, k;
+   float p, q;
+   for(i = 0; i < 3; i++)
+   for(j = 0; j < 3; j++) {
+      if(i == j)
+         b[i][j]=1;
+      else
+         b[i][j]=0;
+   }
+   for(k = 0; k < 3; k++) {
+      for(i = 0; i < 3; i++) {
+         p = m[i][k];
+         q = m[k][k];
+         for(j = 0; j < 3; j++) {
+            if(i != k) {
+               m[i][j] = m[i][j]*q - p*m[k][j];
+               b[i][j] = b[i][j]*q - p*b[k][j];
+            }
+         }
+      }
+   }
+   for(i = 0; i < 3; i++)
+   for(j = 0; j < 3; j++)
+   b[i][j] = b[i][j] / m[i][i];
+   cout<<"\n\nInverse Matrix is:\n";
+   for(i = 0; i < 3; i++) {
+      for(j = 0; j < 3; j++)
+      cout<<b[i][j]<<" ";
+      cout<<"\n";
+   }
+}
+void decrypt() { 
+   int i, j, k;
+   inversematrix();
+   for(i = 0; i < 3; i++)
+   for(j = 0; j < 1; j++)
+   for(k = 0; k < 3; k++)
+   de[i][j] = de[i][j] + b[i][k] * en[k][j];
+   cout<<"\nDecrypted string is: ";
+   for(i = 0; i < 3; i++)
+   cout<<(char)(fmod(de[i][0], 26) + 65); 
+   cout<<"\n";
+}
+int main() {
+   getKeyMatrix();
+   encrypt();
+   decrypt();
+}
+ OUTPUT:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXPERIMENT-9
+AIM: To Perform Cipher Feedback mode of encryption.
+
+CODE:
+#include<iostream>
+#include<math.h>
+using namespace std;
+int p_bit[64] ={0};
+int q_bit[64] ={0};
+int i,j;
+int s=5;
+int bin[5]={0};
+string ct="";
+string cipher="";
+string encrypted_text="";
+int iv[64] = { 1,0,1,0,1,0,1,0,
+1,0,1,0,1,0,1,0,
+1,0,1,0,1,0,1,0,
+1,0,1,0,1,0,1,0,
+1,0,1,0,1,0,1,0,
+
+1,0,1,0,1,0,1,0,
+1,0,1,0,1,0,1,0,
+1,0,1,0,1,0,1,0,};
+int key = 4;
+void perform_encryption()
+{
+int i;
+for(i=0;i<8;i++)
+{
+ct[i]+=(char)((int)ct[i]+4);
+}
+}
+void converttostring()
+{
+int binary[8],rem,base=2,dec;
+int c=0;
+
+for(int j=0;j<8;j++)
+{
+for(int k=0;k<8;k++)
+binary[k] = iv[k+c];
+int i=7;
+while(i>=0)
+{
+rem = binary[i];
+dec+=rem*pow(base,7-i);
+i--;
+}
+char ch=(char)dec;
+ct+=ch;
+c+=8;
+}}
+void converttostring_final()
+{
+int binary[8],rem,base=2,dec;
+int c=0;
+for(int j=0;j<8;j++)
+{
+for(int k=0;k<8;k++)
+binary[k] = q_bit[k+c];
+int i=7;
+while(i>=0)
+{
+rem = binary[i];
+dec+=rem*pow(base,7-i);
+i--;
+}
+char ch=(char)dec;
+cipher+=ch;
+c+=8;
+}}
+void converttobinary(string p)
+{
+int ch=0;
+for(int j=0;j<p.length();j++)
+{
+char c = p[j];
+int bits[8], i;
+for(i = 0; i < 8; i++)
+bits[i] = ((1<<i) & c) != 0 ? 1:0;
+for(i = 7; i >= 0; i--)
+p_bit[7-i+ch]=bits[i];
+ch+=8;
+}}
+void converttobinary_pt(string p)
+{
+int ch=0;
+for(int j=0;j<p.length();j++)
+{
+char c = p[j];
+int bits[8], i;
+for(i = 0; i < 8; i++)
+bits[i] = ((1<<i) & c) != 0 ? 1:0;
+for(i = 7; i >= 0; i--)
+q_bit[7-i+ch]=bits[i];
+ch+=8;
+}}
+void shifter()
+{
+int t;
+for( t=0;t<s;t++)
+bin[t]=p_bit[i] ^ q_bit[i];
+for(t=0;t<64;t++)
+q_bit[t]=q_bit[t+s-1];
+for(int t=59;t<64;t++)
+q_bit[t]=bin[t-59];
+}
+int main()
+{
+string pt="Check Code";
+string xt="";
+converttostring();
+perform_encryption();
+converttobinary(ct);
+converttobinary(pt);
+for(i=0;i<16;i++)
+{
+shifter();
+}
+converttostring_final();
+cout<<"\Your Cipher Text after cipher feedback mode encryption "<<cipher<<endl;
+}
+ OUTPUT:
+ 
+
+
+
+
+
+
+
+EXPERIMENT-10
+AIM: To Perform Output Feedback mode of encryption.
+
+CODE:
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+plainText = b"Lorem ipsum dolor sit amet, consectetur adipiscing e"
+key = b"ANAAREMEREAAAAAA"
+def ofbEnc(plainText, key):
+    pos = 0
+    cipherTextChunks = []
+    iv = get_random_bytes(16)
+    originalIV = iv
+    cipher = AES.new(key, AES.MODE_ECB)
+    if len(plainText) % 16 != 0:
+        plainText += b"1"
+    while len(plainText) % 16 != 0:
+        plainText += b"0"
+    while pos + 16 <= len(plainText):
+        toXor = cipher.encrypt(iv)
+        nextPos = pos + 16
+        toEnc = plainText[pos:nextPos]
+        cipherText = bytes([toXor[i] ^ toEnc[i] for i in range(16)])
+        cipherTextChunks.append(cipherText)
+        pos += 16
+        iv = toXor
+    return (originalIV, cipherTextChunks)
+def ofbDec(cipherTextChunks, key, iv):
+    plainText = b""
+    cipher = AES.new(key, AES.MODE_ECB)
+    for chunk in cipherTextChunks:
+        toXor = cipher.encrypt(iv)
+        plainText += bytes([toXor[i] ^ chunk[i] for i in range(15)])
+        iv = toXor
+    while plainText[-1] == 48:
+        plainText = plainText[0:-1]
+    if plainText[-1] == 49:
+        plainText = plainText[0:-1]
+    return plaintext
+
+iv, result = ofbEnc(plainText, key)
+print(iv, result)
+plain = ofbDec(result, key, iv)
+print(plain)
+
+OUTPUT:
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Experiment 11
+Vernam Cipher
+
+
+
+
+#include<stdio.h> 
+char arr[26][26];
+char message[22],key[22],emessage[22],retMessage[22];
+int findRow(char);
+int findColumn(char);
+int findDecRow(char,int);
+int main() {
+int i=0,j,k,r,c;
+clrscr();
+k=96;
+for (i=0;i<26;i++) {
+k++;
+for (j=0;j<26;j++) {
+arr[i][j]=k++;
+if(k==123) 
+k=97;
+}
+}
+printf("\nEnter message\n");
+gets(message);
+printf("\nEnter the key\n");
+gets(key);
+// Encryption 
+for (i=0;key[i]!=NULL;i++) {
+c=findRow(key[i]);
+r=findColumn(message[i]);
+emessage[i]=arr[r][c];
+}
+emessage[i]='\0';
+printf("\n Encrypted message is:\n\n");
+for (i=0;emessage[i]!=NULL;i++) 
+printf("%c",emessage[i]);
+//decryption 
+for (i=0;key[i]!=NULL;i++) {
+c=findColumn(key[i]);
+r=findDecRow(emessage[i],c);
+retMessage[i]=arr[r][0];
+}
+retMessage[i]='\0';
+printf("\n\nMessage Retrieved is:\n\n");
+for (i=0;retMessage[i]!=NULL;i++) 
+printf("%c",retMessage[i]);
+getch();
+return(0);
+}
+int findRow(char c) {
+int i;
+for (i=0;i<26;i++) {
+if(arr[0][i]==c) 
+return(i);
+}
+}
+int findColumn(char c) {
+int i;
+for (i=0;i<26;i++) {
+if(arr[i][0]==c) 
+ return(i);
+}
+}
+int findDecRow(char c,int j) {
+int i;
+for (i=0;i<26;i++) {
+if(arr[i][j]==c) 
+return(i);
+}
+}
+
